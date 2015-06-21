@@ -3,15 +3,18 @@
               [reagent.session :as session]
               [secretary.core :as secretary :include-macros true]
               [goog.events :as events]
+              [smartyper.typing-area :as typing-area]
               [goog.history.EventType :as EventType])
     (:import goog.History))
+
+;; My code
 
 ;; -------------------------
 ;; Views
 
 (defn home-page []
   [:div [:h2 "Welcome to smartyper"]
-   [:div [:a {:href "#/about"} "go to about page"]]])
+   [(typing-area/component "This is the text that the user should type.")]])
 
 (defn about-page []
   [:div [:h2 "About smartyper"]
@@ -47,5 +50,6 @@
   (reagent/render [current-page] (.getElementById js/document "app")))
 
 (defn init! []
+  (typing-area/init-typing-area!)
   (hook-browser-navigation!)
   (mount-root))

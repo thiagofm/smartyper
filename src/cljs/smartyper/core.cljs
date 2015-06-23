@@ -14,7 +14,7 @@
 
 (defn home-page []
   [:div [:h2 "Welcome to smartyper"]
-   [(typing-area/component "This is the text that the user should type.")]])
+   (typing-area/load-component)])
 
 (defn about-page []
   [:div [:h2 "About smartyper"]
@@ -51,5 +51,6 @@
 
 (defn init! []
   (typing-area/init-typing-area!)
+  (typing-area/set-text "This is the text that the user should type.")
   (hook-browser-navigation!)
   (mount-root))

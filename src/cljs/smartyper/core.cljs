@@ -14,11 +14,11 @@
 
 (defn home-page []
   [:div [:h2 "Welcome to smartyper"]
-   (typing-area/load-component)])
+   (typing-area/component)])
 
 (defn about-page []
   [:div [:h2 "About smartyper"]
-   [:div [:a {:href "#/"} "go to the home page"]]])
+    [:div [:a {:href "#/"} "go to the home page"]]])
 
 (defn current-page []
   [:div [(session/get :current-page)]])
@@ -50,7 +50,6 @@
   (reagent/render [current-page] (.getElementById js/document "app")))
 
 (defn init! []
-  (typing-area/init-typing-area!)
   (typing-area/set-text "This is the text that the user should type.")
   (hook-browser-navigation!)
   (mount-root))

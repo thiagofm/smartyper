@@ -3,42 +3,48 @@
             [reagent.core :as reagent :refer [atom]]
             [reagent.session :as session]))
 
-(def typing-area-text (atom nil))
-
-(defn characters-data [text]
-  (vec (map-indexed
-         (fn[i c] { :character c :typed false :id i}) text)))
+(def wrong-character-maps (atom []))
+(def character-maps (atom []))
+(defrecord CharacterMap [id character typed])
 
 (defn set-text [text]
-  (swap! typing-area-text #(characters-data text)))
+  "Sets the text for the component"
+  (swap! character-maps
+         #(vec (map-indexed (fn[i c] (CharacterMap. i c false))
+                            text))))
 
-(defn characters-component []
-  (map (fn [c]
-         [:span
-          {:style {:color (if (= (:typed c) false) "red" "black")}}
-          (:character c)])
-      @typing-area-text))
+(defn- next-character-id-to-type [characters]
+  "Finds the next CharacterMap needed to be typed"
+  (first (filter #(= (:typed %) false) characters)))
 
-(defn load-component []
-  (into
-    [:div#typing-area]
-    (characters-component )))
+(defn- update-wrong-typed-characters [])
 
-(defn current-needed-character-id [data]
-  (:id (first (filter #(= (:typed %) false) data))))
+(defn- update-latest-character-map-as-typed []
+  "Updates the latest CharacterMap as typed"
+  (let [characters @character-maps
+        character-map-id (:id (next-character-id-to-type characters))]
+    (swap!
+      character-maps
+      #(assoc-in characters [character-map-id :typed] true))))
 
-(defn update-typed [id]
-  (let [x (map (fn[d] (if (= id (:id d)) (assoc d :typed true) d)) @typing-area-text)]
-    (swap! typing-area-text (fn[n] (vec x)))))
+(defn- keypress-watcher [key a old-val new-val]
+  (let [cm @character-maps
+        character-id (:id (next-character-id-to-type cm))
+        character-map (get cm character-id)]
+    (if (= new-val (:character character-map)) ; Value is typed right?
+      update-latest-character-map-as-typed
+      update-wrong-typed-characters)))
 
-(defn keypress-watcher [key a old-val new-val]
-  (let [cx (get @typing-area-text (current-needed-character-id @typing-area-text))]
-  (if (= new-val (:character cx))
-    (update-typed (current-needed-character-id @typing-area-text))
-    nil)))
-
-(defn init-typing-area! []
+(defn- setup! []
   (keypress/hook-keypress-detection!)
   (add-watch keypress/last-keypress :watch-change keypress-watcher))
 
-
+(defn component []
+  (setup!)
+  (into
+    [:div#typing-area]
+    (map (fn [c]
+         [:span
+          {:style {:color (if (= (:typed c) false) "red" "black")}}
+          (:character c)])
+      @character-maps)))

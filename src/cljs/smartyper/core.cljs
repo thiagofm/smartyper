@@ -4,6 +4,7 @@
               [secretary.core :as secretary :include-macros true]
               [goog.events :as events]
               [smartyper.typing-area :as typing-area]
+              [smartyper.timer :as timer]
               [goog.history.EventType :as EventType])
     (:import goog.History))
 
@@ -14,6 +15,7 @@
 
 (defn home-page []
   [:div [:h2 "Welcome to smartyper"]
+   (timer/component)
    (typing-area/component)])
 
 (defn about-page []

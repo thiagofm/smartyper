@@ -32,3 +32,82 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+#typing-area {
+  font-family: Courier, Lucida Console;
+}
+
+.not-typed {
+  color: black;
+}
+
+.wrongly-typed {
+  background-color: red;
+  color: white;
+}
+
+.typed {
+  color: blue;
+}
+
+.next {
+  color: white;
+  background-color: black;
+  animation: 1s blink linear infinite;
+
+-webkit-animation-name: blinker;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+}
+
+@-moz-keyframes blinker {  
+  0% {
+    color: white;
+    background-color: black;
+  }
+
+  50% {
+    color: black;
+    background-color: white;
+  }
+
+  100% {
+    color: white;
+    background-color: black;
+  }
+}
+
+@-webkit-keyframes blinker {  
+  0% {
+    color: white;
+    background-color: black;
+  }
+
+  50% {
+    color: black;
+    background-color: white;
+  }
+
+  100% {
+    color: white;
+    background-color: black;
+  }
+}
+
+@keyframes blinker {  
+  0% {
+    color: white;
+    background-color: black;
+  }
+
+  50% {
+    color: black;
+    background-color: white;
+  }
+
+  100% {
+    color: white;
+    background-color: black;
+  }
+}

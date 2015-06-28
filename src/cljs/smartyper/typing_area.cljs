@@ -23,17 +23,17 @@
   "Updates the latest CharacterMap as typed"
   (let [characters @character-maps
         character-map-id (:id (next-character-id-to-type characters))]
-    (swap!
-      character-maps
-      #(assoc-in characters [character-map-id :typed] true))))
+    (swap! character-maps #(assoc-in characters [character-map-id :typed] true))))
+
+(defn- amount-of-character-map-as-typed [character]
+  (:id (next-character-id-to-type character)))
 
 (defn- update-latest-character-map-as-not-typed! []
   "Updates the latest CharacterMap as typed"
   (let [characters @character-maps
         character-map-id (dec (:id (next-character-id-to-type characters)))]
     (when (>= character-map-id 0)
-      (swap! character-maps #(assoc-in characters [character-map-id :typed] false))
-      )))
+      (swap! character-maps #(assoc-in characters [character-map-id :typed] false)))))
 
 (defn- add-wrong-character-to-stack [character]
   (swap! wrong-characters-stack #(conj @wrong-characters-stack character)))
@@ -75,6 +75,11 @@
   (into
     [:div#typing-area]
     (conj
-          (map (fn [c] (when (not (:typed c)) [:span {:style {:color "black"}} (:character c)])) @character-maps)
-          (map (fn [c] [:span {:style {:color "red"}} c]) @wrong-characters-stack)
-          (map (fn [c] (when (:typed c) [:span {:style {:color "blue"}} (:character c)])) @character-maps))))
+       (keep (fn[n] n)(map-indexed (fn [i c]
+              (when (not (:typed c))
+                (if (= i 0)
+                  [:span {:class "not-typed next"} (:character c)]
+                  [:span {:class "not-typed"} (:character c)])))
+            (nthnext @character-maps (+ (count @wrong-characters-stack) (amount-of-character-map-as-typed @character-maps)))))
+       (keep (fn[n] n)(map (fn [c] [:span {:class "wrongly-typed"} c]) @wrong-characters-stack))
+       (keep (fn[n] n)(map (fn [c] (when (:typed c) [:span {:class "typed"} (:character c)])) @character-maps)))))

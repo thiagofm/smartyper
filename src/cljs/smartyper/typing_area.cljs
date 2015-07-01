@@ -78,8 +78,8 @@
        (keep (fn[n] n)(map-indexed (fn [i c]
               (when (not (:typed c))
                 (if (= i 0)
-                  [:span {:class "not-typed next"} (:character c)]
-                  [:span {:class "not-typed"} (:character c)])))
+                  ^{:key (str i "not-typed")} [:span {:class "not-typed next"} (:character c)]
+                  ^{:key (str i "not-typed")} [:span {:class "not-typed"} (:character c)])))
             (nthnext @character-maps (+ (count @wrong-characters-stack) (amount-of-character-map-as-typed @character-maps)))))
-       (keep (fn[n] n)(map (fn [c] [:span {:class "wrongly-typed"} c]) @wrong-characters-stack))
-       (keep (fn[n] n)(map (fn [c] (when (:typed c) [:span {:class "typed"} (:character c)])) @character-maps)))))
+       (keep (fn[n] n)(map-indexed (fn [i c] ^{:key (str i "wrongly-typed")} [:span {:class "wrongly-typed"} c]) @wrong-characters-stack))
+       (keep (fn[n] n)(map-indexed (fn [i c] (when (:typed c) ^{:key (str i "typed")} [:span {:class "typed"} (:character c)])) @character-maps)))))

@@ -2,11 +2,11 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [smartyper.typing-area :as typing-area]))
 
-(def current-time (atom 0))
-(def start-time (atom 0))
-(def amount-of-typed-characters (atom 0))
-(def amount-of-errors (atom 0))
-(def done (atom false))
+(defonce current-time (atom 0))
+(defonce start-time (atom 0))
+(defonce amount-of-typed-characters (atom 0))
+(defonce amount-of-errors (atom 0))
+(defonce done (atom false))
 
 (defn current-time-in-seconds []
   (.getTime (js/Date.)))

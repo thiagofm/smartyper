@@ -1,6 +1,6 @@
 (ns smartyper.keypress)
 
-(def last-keypress (atom 0))
+(defonce last-keypress (atom 0))
 
 (defn- keypress-handler [e]
   (let [key-code (.-keyCode e)]

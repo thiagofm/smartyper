@@ -3,9 +3,9 @@
             [reagent.core :as reagent :refer [atom]]
             [reagent.session :as session]))
 
-(def character-maps (atom []))
-(def typed-characters (atom []))
-(def wrong-characters-stack (atom []))
+(defonce character-maps (atom []))
+(defonce typed-characters (atom []))
+(defonce wrong-characters-stack (atom []))
 (defrecord CharacterMap [id character typed])
 (defrecord TypedCharacter [character correct])
 
